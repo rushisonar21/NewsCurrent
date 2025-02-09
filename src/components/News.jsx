@@ -16,30 +16,37 @@ export class News extends Component {
     }
     
   }
-  async componentDidMount(){
+  FetchNewsApi = async (page_number)=>{
     this.setState({loading: true})
-    let response = await fetch(`https://newsapi.org/v2/top-headlines?category=${this.props.category}&pageSize=${this.pageSize}&page=1&apiKey=${this.props.api_key}`)
-    if(response.status===200){
-    let data = await response.json()
-    this.maxPage = Math.ceil(data.totalResults/this.pageSize)
-    this.setState({news_articles: data.articles,loading: false})
+    try{
+      let response = await fetch(`https://newsapi.org/v2/top-headlines?category=${this.props.category}&pageSize=${this.pageSize}&page=${page_number}&apiKey=${this.props.api_key}`)
+      if(response.status===200){
+        let data = await response.json()
+        this.setState({news_articles: data.articles,loading: false})
+        return data
+      }
+      else{
+          this.setState({news_articles: ["Backend is down"]})
+      }
     }
-    else{
-      this.setState({news_articles: ["Backend is down"]})
+    catch(error){
+      console.log("error from fetchNewsApi",error)
     }
+    }
+
+  async componentDidMount(){
+    let data = await this.FetchNewsApi(1)
+    this.maxPage = Math.ceil(data?data.totalResults/this.pageSize:0)
   }
   next = async ()=>{
-    this.setState({loading: true})
-    let response = await fetch(`https://newsapi.org/v2/top-headlines?category=${this.props.category}&pageSize=${this.pageSize}&page=${this.state.pageNumber+1}&apiKey=${this.props.api_key}`)
-    let data = await response.json()
-    this.setState({news_articles: data.articles, pageNumber: this.state.pageNumber+1,loading: false})
-  }
+    this.FetchNewsApi(this.state.pageNumber+1)
+    this.setState({pageNumber: this.state.pageNumber+1})
+    }
   prev = async ()=>{
-    this.setState({loading: true})
-    let response = await fetch(`https://newsapi.org/v2/top-headlines?category=${this.props.category}&pageSize=${this.pageSize}&page=${this.state.pageNumber-1}&apiKey=${this.props.api_key}`)
-    let data = await response.json()
-    this.setState({news_articles: data.articles, pageNumber: this.state.pageNumber - 1,loading: false})
-  }
+    this.FetchNewsApi(this.state.pageNumber-1)
+    this.setState({pageNumber: this.state.pageNumber-1})
+    }
+
   render() {
     return (
       <div className='container' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

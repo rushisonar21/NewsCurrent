@@ -6,21 +6,35 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
+import LoadingBar from 'react-top-loading-bar';
 
 export default class App extends Component {
+  state = {
+    progress: 10,
+  }
+
+  updateProgress = (new_progress)=>{
+      this.setState({progress: new_progress})
+  }
+  api_key=import.meta.env.VITE_API_KEY
   render() {
     return (
       <>
+      <LoadingBar
+        color="#f11946"
+        progress={this.state.progress}
+        height={2}
+      />
       <Router>
       <Navbar/>
         <Routes>
-          <Route exact path="/NewsCurrent" element={<News key="general" category="general" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>
-          <Route exact path="/NewsCurrent/general" element={<News key="general" category="general" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>
-          <Route exact path="/NewsCurrent/sports" element={<News  key="sports" category="sports" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>
-          <Route exact path="/NewsCurrent/business" element={<News key="business" category="business" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>  
-          <Route exact path="/NewsCurrent/technology" element={<News key="technology" category="technology" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>
-          <Route exact path="/NewsCurrent/health" element={<News key="health" category="health" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>
-          <Route exact path="/NewsCurrent/entertainment" element={<News key="entertainment" category="entertainment" api_key="500bdbc1b2d147c2b4f352b3358d546c"/>}></Route>
+          <Route exact path="/NewsCurrent" element={<News updateProgress = {this.updateProgress} key="general" category="general" api_key={this.api_key}/>}></Route>
+          <Route exact path="/NewsCurrent/general" element={<News updateProgress = {this.updateProgress} key="general" category="general" api_key={this.api_key}/>}></Route>
+          <Route exact path="/NewsCurrent/sports" element={<News updateProgress = {this.updateProgress}  key="sports" category="sports" api_key={this.api_key}/>}></Route>
+          <Route exact path="/NewsCurrent/business" element={<News updateProgress = {this.updateProgress} key="business" category="business" api_key={this.api_key}/>}></Route>  
+          <Route exact path="/NewsCurrent/technology" element={<News updateProgress = {this.updateProgress} key="technology" category="technology" api_key={this.api_key}/>}></Route>
+          <Route exact path="/NewsCurrent/health" element={<News updateProgress = {this.updateProgress} key="health" category="health" api_key={this.api_key}/>}></Route>
+          <Route exact path="/NewsCurrent/entertainment" element={<News updateProgress = {this.updateProgress} key="entertainment" category="entertainment" api_key={this.api_key}/>}></Route>
         </Routes>
       </Router>
       </>

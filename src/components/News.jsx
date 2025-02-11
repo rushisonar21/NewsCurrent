@@ -6,8 +6,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 export class News extends Component {
   
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.pageSize=15;
     this.state={
       news_articles : [],
@@ -18,13 +18,17 @@ export class News extends Component {
     
   }
   FetchNewsApi = async ()=>{
+
+    this.props.updateProgress(30)
     this.setState({loading: true})
     document.title = `NewsCurrent - ${((this.props.category).charAt(0)).toUpperCase()+(this.props.category).slice(1)}`
     try{
       let response = await fetch(`https://newsapi.org/v2/top-headlines?category=${this.props.category}&pageSize=${this.pageSize}&page=${this.state.pageNumber}&apiKey=${this.props.api_key}`)
       if(response.status===200){
+        this.props.updateProgress(50)
         let data = await response.json()
         this.setState({news_articles: data.articles,loading: false, totalResults: data.totalResults})
+        this.props.updateProgress(100)
       }
       else{
           this.setState({news_articles: ["Backend is down"]})

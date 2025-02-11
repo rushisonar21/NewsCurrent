@@ -13,7 +13,7 @@ export class Newsitem extends Component {
         <div className="card mb-3">
           <img src={img_url ? img_url : defaultImg} className="card-img-top" alt="..." />
           <div className="card-body">
-            <h5 className="card-title">{title} <span class="badge text-bg-info">{source}</span></h5>
+            <h5 className="card-title">{title} <span className="badge text-bg-info">{source}</span></h5>
             <p className="card-text">{description}</p>
             <p className="card-text"><small className="text-body-secondary">By {author} on {new Date(date).toUTCString()}</small></p>
             <a href={news_url} target="_blank" className="btn btn-primary">Read more</a>

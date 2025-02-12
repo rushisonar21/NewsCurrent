@@ -27,7 +27,7 @@ const News = (props) => {
         props.updateProgress(100)
       }
       else {
-        setNewsArticles(data.articles)
+        setNewsArticles(["Backend is down"])
       }
     }
     catch (error) {
